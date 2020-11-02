@@ -19,6 +19,7 @@ function Square(props: SquareProps) {
 
 interface BoardState {
     squares: SquareType[];
+    xIsNext: boolean;
 }
 
 class Board extends React.Component<any, BoardState> {
@@ -28,15 +29,20 @@ class Board extends React.Component<any, BoardState> {
         super(props);
 
         this.state = {
-            squares: new Array<SquareType>(9).fill(null)
+            squares: new Array<SquareType>(9).fill(null),
+            xIsNext: true
         }
     }
 
     handleClick(i: number): void {
 
         const squares = this.state.squares.slice();
-        squares[i] = 'X';
-        this.setState({squares: squares});
+        squares[i] = this.state.xIsNext ? 'X' : `O`;
+
+        this.setState({
+            squares: squares,
+            xIsNext: !this.state.xIsNext
+        });
       }
     
 
@@ -50,12 +56,11 @@ class Board extends React.Component<any, BoardState> {
     }
 
     render() {
-
-        const status = 'Next player: X';
-
         return (
             <div>
-                <div className="status">{status}</div>
+                <div className="status">
+                    {`Next player: ${ this.state.xIsNext ? "X" : "O" }`}
+                </div>
                 <div className="board-row">
                     {this.renderSquare(0)}
                     {this.renderSquare(1)}
